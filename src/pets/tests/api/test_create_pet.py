@@ -1,22 +1,31 @@
+import uuid
+from unittest.mock import Mock
+
 import pytest
 from rest_framework import status
 from rest_framework.reverse import reverse
+from rest_framework.test import APIRequestFactory
 
 from pets.models import Pet
+from pets.use_cases.create_pet import CreatePet
+from pets.views import PetViewSet
 
 
 class TestCreatePet:
-    @pytest.mark.django_db
-    def test_perfect(self, user_db, api_user_client):
+    def test_perfect(self, user, pet, monkeypatch):
+        mock = Mock(return_value=pet)
+        monkeypatch.setattr(CreatePet, "run", mock)
+
         url = reverse("pet-list")
         payload = {"name": "Max", "species": "dog", "breed": "golden retriever"}
-
-        rv = api_user_client.post(url, payload)
+        factory = APIRequestFactory()
+        request = factory.post(url, payload)
+        request.user = user
+        rv = PetViewSet.as_view({"post": "create"})(request)
 
         assert rv.status_code == status.HTTP_201_CREATED, rv.data
 
-        assert Pet.objects.count() == 1
-        pet = Pet.objects.first()
+        mock.assert_called_once()
 
         assert rv.data["uuid"]
         assert rv.data["url"] == reverse(
@@ -34,16 +43,9 @@ class TestCreatePet:
         assert rv.data["color"] == ""
         assert rv.data["chip_number"] == ""
         assert rv.data["passport_number"] == ""
+        assert len(rv.data.keys()) == 12
 
-        assert pet.name == "Max"
-        assert pet.official_name == ""
-        assert pet.date_of_birth is None
-        assert bool(pet.image) is False
-        assert pet.species == "dog"
-        assert pet.breed == "golden retriever"
-        assert pet.sex == ""
-        assert pet.color == ""
-        assert pet.chip_number == ""
-        assert pet.passport_number == ""
+    def test_unauthorized(self, api_client):
+        rv = api_client.post(reverse("pet-list"), {})
 
-        assert list(pet.owners.all()) == [user_db]
+        assert rv.status_code == status.HTTP_403_FORBIDDEN

@@ -9,3 +9,9 @@ class TestListPets:
         pets = ListPets().run(user=user_db)
 
         assert list(pets) == [pet_db]
+
+    @pytest.mark.django_db
+    def test_only_own_pets(self, user_db, user2_pet2_link_db):
+        pets = ListPets().run(user=user_db)
+
+        assert list(pets) == []
