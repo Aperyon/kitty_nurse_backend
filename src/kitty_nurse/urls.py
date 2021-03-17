@@ -18,10 +18,12 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 import pets.views
+import notes.views
 
 
 router = DefaultRouter()
 router.register("pets", pets.views.PetViewSet, basename="pet")
+router.register("notes", notes.views.NoteViewSet, basename="note")
 
 
 urlpatterns = [

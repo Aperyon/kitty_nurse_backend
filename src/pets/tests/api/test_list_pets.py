@@ -3,34 +3,18 @@ from unittest.mock import Mock
 import pytest
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APIRequestFactory
-
-from pets.use_cases.list_pets import ListPets
-from pets.views import PetViewSet
 
 
 class TestListPetsAPI:
-    def test_perfect(self, user, pet, monkeypatch):
-        mock = Mock(return_value=[pet])
-        monkeypatch.setattr(ListPets, "run", mock)
-
-        factory = APIRequestFactory()
+    @pytest.mark.django_db
+    def test_perfect(self, api_user_client, user_pet_link_db, monkeypatch):
         url = reverse("pet-list")
-        request = factory.get(url)
-        view = PetViewSet.as_view({"get": "list"})
-        request.user = user
-        rv = view(request)
+        rv = api_user_client.get(url)
 
-        mock.assert_called_once()
         assert rv.status_code == status.HTTP_200_OK
         assert len(rv.data) == 1
-
         assert rv.data[0]["uuid"]
-        assert rv.data[0]["url"] == reverse(
-            "pet-detail",
-            kwargs={"pk": pet.uuid},
-            request=rv.renderer_context["request"],
-        )
+        assert rv.data[0]["url"]
         assert rv.data[0]["name"] == "Max"
         assert rv.data[0]["official_name"] == ""
         assert rv.data[0]["date_of_birth"] is None
