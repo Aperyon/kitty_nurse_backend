@@ -1,12 +1,9 @@
-import uuid
 from unittest.mock import Mock
 
-import pytest
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIRequestFactory
 
-from pets.models import Pet
 from pets.use_cases.create_pet import CreatePet
 from pets.views import PetViewSet
 
