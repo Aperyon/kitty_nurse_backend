@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken import views as drf_views
 from rest_framework.routers import DefaultRouter
 
 import pets.views
@@ -29,7 +30,8 @@ router.register("notes", notes.views.NoteViewSet, basename="note")
 
 api_urlpatterns = [
     path("", include(router.urls)),
-    path("signup", users.views.signup_user_view, name="signup"),
+    path("signup/", users.views.signup_user_view, name="signup"),
+    path("login/", drf_views.obtain_auth_token, name="login"),
 ]
 
 urlpatterns = [

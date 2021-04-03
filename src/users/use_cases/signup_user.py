@@ -2,6 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from rest_framework.authtoken.models import Token
 
 from users.models import User
 
@@ -14,8 +15,9 @@ class SignupUser:
         user.set_password(password)
 
         self.persist(user)
+        token = self.create_auth_token(user)
 
-        return user
+        return user, token.key
 
     def validate(self, email, password):
         self.validate_email(email)
@@ -42,3 +44,7 @@ class SignupUser:
 
     def persist(self, user):
         user.save()
+
+    def create_auth_token(self, user):
+        token, created = Token.objects.get_or_create(user=user)
+        return token

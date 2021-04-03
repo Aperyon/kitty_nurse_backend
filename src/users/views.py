@@ -11,6 +11,6 @@ def signup_user_view(request):
     email = request.data.get("email")
     password = request.data.get("password")
 
-    SignupUser().run(email, password)
+    user, token = SignupUser().run(email, password)
 
-    return Response({}, status=status.HTTP_201_CREATED)
+    return Response({"token": token}, status=status.HTTP_201_CREATED)
