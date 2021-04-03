@@ -19,6 +19,7 @@ from rest_framework.routers import DefaultRouter
 
 import pets.views
 import notes.views
+import users.views
 
 
 router = DefaultRouter()
@@ -26,7 +27,12 @@ router.register("pets", pets.views.PetViewSet, basename="pet")
 router.register("notes", notes.views.NoteViewSet, basename="note")
 
 
+api_urlpatterns = [
+    path("", include(router.urls)),
+    path("signup", users.views.signup_user_view, name="signup"),
+]
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include(router.urls)),
+    path("api/", include(api_urlpatterns)),
 ]

@@ -7,6 +7,9 @@ test:
 makemigrations:
 	src/manage.py makemigrations
 
+shell:
+	src/manage.py shell
+
 migrate:
 	src/manage.py migrate
 
