@@ -1,9 +1,10 @@
-from rest_framework.serializers import HyperlinkedModelSerializer
+from django.templatetags.static import static
+from rest_framework import serializers
 
 from events.models import Event, EventType
 
 
-class EventSerializer(HyperlinkedModelSerializer):
+class EventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
         fields = [
@@ -20,7 +21,14 @@ class EventSerializer(HyperlinkedModelSerializer):
         extra_kwargs = {"datetime": {"default": None}}
 
 
-class EventTypeSerializer(HyperlinkedModelSerializer):
+class EventTypeSerializer(serializers.HyperlinkedModelSerializer):
+    icon_url = serializers.SerializerMethodField()
+
     class Meta:
         model = EventType
-        fields = ["url", "uuid", "created_at", "name", "color", "icon"]
+        fields = ["url", "uuid", "created_at", "name", "color", "icon_url"]
+
+    def get_icon_url(self, instance):
+        yolo = self.context["request"].build_absolute_uri(static(instance.icon))
+        print(yolo)
+        return yolo

@@ -29,4 +29,4 @@ class TestCreatePet:
     def test_unauthorized(self, api_client):
         rv = api_client.post(reverse("pet-list"), {})
 
-        assert rv.status_code == status.HTTP_403_FORBIDDEN
+        assert rv.status_code == status.HTTP_401_UNAUTHORIZED

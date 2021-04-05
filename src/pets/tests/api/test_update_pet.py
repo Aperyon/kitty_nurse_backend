@@ -16,4 +16,4 @@ class TestUpdatePetAPI:
     def test_unauthorized(self, api_client, pet):
         rv = api_client.patch(reverse("pet-detail", kwargs={"pk": pet.uuid}), {})
 
-        assert rv.status_code == status.HTTP_403_FORBIDDEN
+        assert rv.status_code == status.HTTP_401_UNAUTHORIZED

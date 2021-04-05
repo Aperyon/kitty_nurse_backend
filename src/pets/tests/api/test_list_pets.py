@@ -32,4 +32,4 @@ class TestListPetsAPI:
 
         rv = api_client.get(url)
 
-        assert rv.status_code == status.HTTP_403_FORBIDDEN
+        assert rv.status_code == status.HTTP_401_UNAUTHORIZED

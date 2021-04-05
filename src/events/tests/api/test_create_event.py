@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 
 
-class TestCreateNoteAPI:
+class TestCreateEventAPI:
     @pytest.mark.django_db
     def test_perfect(
         self, user_db, pet_db, user_pet_link_db, api_user_client, monkeypatch
@@ -21,11 +21,14 @@ class TestCreateNoteAPI:
         assert rv.data["uuid"]
         assert rv.data["url"]
         assert rv.data["pet"]
-        assert rv.data["datetime"] is None
+        assert rv.data["event_type"] is None
+        assert rv.data["title"] == ""
         assert rv.data["description"] == "lorem ipsum dolor sit amet"
-        assert len(rv.data.keys()) == 5
+        assert rv.data["datetime"] is None
+        assert rv.data["created_at"]
+        assert len(rv.data.keys()) == 8
 
     def test_unauthorized(self, api_client):
         rv = api_client.post(reverse("event-list"), {})
 
-        assert rv.status_code == status.HTTP_403_FORBIDDEN
+        assert rv.status_code == status.HTTP_401_UNAUTHORIZED

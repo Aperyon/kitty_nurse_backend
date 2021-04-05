@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 
 
-class TestNoteDeleteAPI:
+class TestEventDeleteAPI:
     @pytest.mark.django_db
     def test_perfect(self, api_user_client, event_db, pet_db):
         rv = api_user_client.delete(
@@ -24,4 +24,4 @@ class TestNoteDeleteAPI:
     def test_unauthorized(self, api_client, event):
         rv = api_client.delete(reverse("event-detail", kwargs={"pk": event.uuid}))
 
-        assert rv.status_code == status.HTTP_403_FORBIDDEN
+        assert rv.status_code == status.HTTP_401_UNAUTHORIZED

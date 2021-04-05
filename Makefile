@@ -7,11 +7,11 @@ dotenv:
 test:
 	pytest
 
+shell:
+	src/manage.py shell_plus
+
 makemigrations:
 	src/manage.py makemigrations
-
-shell:
-	src/manage.py shell
 
 migrate:
 	src/manage.py migrate
