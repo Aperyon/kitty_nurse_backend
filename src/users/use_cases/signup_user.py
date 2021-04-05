@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from rest_framework.authtoken.models import Token
 
+from events.usecases.event_type_preset import create_event_type_preset_for_user
 from users.models import User
 
 
@@ -16,6 +17,7 @@ class SignupUser:
 
         self.persist(user)
         token = self.create_auth_token(user)
+        create_event_type_preset_for_user(user)
 
         return user, token.key
 
@@ -37,7 +39,6 @@ class SignupUser:
             validate_password(password)
         except ValidationError:
             raise ValidationError({"password": _("Invalid password")})
-        print("Valid password", password)
 
     def check_user_with_same_email(self, email):
         return User.objects.filter(email=email).exists()

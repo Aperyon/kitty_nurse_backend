@@ -28,6 +28,7 @@ import users.views
 router = DefaultRouter()
 router.register("pets", pets.views.PetViewSet, basename="pet")
 router.register("events", events.views.EventViewSet, basename="event")
+router.register("event-types", events.views.EventTypeViewSet, basename="eventtype")
 
 
 api_urlpatterns = [
