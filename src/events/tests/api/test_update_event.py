@@ -5,9 +5,9 @@ from rest_framework.reverse import reverse
 
 class TestNoteUpdateAPI:
     @pytest.mark.django_db
-    def test_perfect(self, api_user_client, note_db, pet_db):
+    def test_perfect(self, api_user_client, event_db, pet_db):
         rv = api_user_client.patch(
-            reverse("note-detail", kwargs={"pk": note_db.uuid}),
+            reverse("event-detail", kwargs={"pk": event_db.uuid}),
             {"description": "Lorem ipsum2"},
         )
 
@@ -23,12 +23,14 @@ class TestNoteUpdateAPI:
         assert rv.data["datetime"] is None
 
     @pytest.mark.django_db
-    def test_not_own_note(self, api_user_client, note2_db):
-        rv = api_user_client.patch(reverse("note-detail", kwargs={"pk": note2_db.uuid}))
+    def test_not_own_event(self, api_user_client, event2_db):
+        rv = api_user_client.patch(
+            reverse("event-detail", kwargs={"pk": event2_db.uuid})
+        )
 
         assert rv.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_unauthorized(self, api_client, note):
-        rv = api_client.patch(reverse("note-detail", kwargs={"pk": note.uuid}))
+    def test_unauthorized(self, api_client, event):
+        rv = api_client.patch(reverse("event-detail", kwargs={"pk": event.uuid}))
 
         assert rv.status_code == status.HTTP_403_FORBIDDEN

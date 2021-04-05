@@ -13,19 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views as drf_views
 from rest_framework.routers import DefaultRouter
 
 import pets.views
-import notes.views
+import events.views
 import users.views
 
 
 router = DefaultRouter()
 router.register("pets", pets.views.PetViewSet, basename="pet")
-router.register("notes", notes.views.NoteViewSet, basename="note")
+router.register("events", events.views.EventViewSet, basename="event")
 
 
 api_urlpatterns = [
@@ -37,4 +39,4 @@ api_urlpatterns = [
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(api_urlpatterns)),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

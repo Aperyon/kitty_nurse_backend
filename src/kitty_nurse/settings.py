@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "users",
     "pets",
-    "notes",
+    "events",
 ]
 
 MIDDLEWARE = [
@@ -141,3 +141,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "media/"
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024

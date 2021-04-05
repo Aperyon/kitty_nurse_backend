@@ -15,14 +15,15 @@ class CreatePet:
         official_name: str = "",
         date_of_birth: dt.date = None,
         image: str = "",
-        species: str,
-        breed: str,
+        species: str = "",
+        breed: str = "",
         sex: str = "",
         color: str = "",
         chip_number: str = "",
         passport_number: str = "",
         owners: List[User] = None,
     ) -> Pet:
+        print("Image", image)
         if owners is None:
             owners = []
 
