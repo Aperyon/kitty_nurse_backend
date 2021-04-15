@@ -18,7 +18,10 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
             "pet",
             "event_type",
         ]
-        extra_kwargs = {"datetime": {"default": None}}
+        extra_kwargs = {
+            "datetime": {"default": None},
+            "title": {"required": True, "allow_blank": False},
+        }
 
 
 class EventTypeSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,6 +32,4 @@ class EventTypeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "uuid", "created_at", "name", "color", "icon_url"]
 
     def get_icon_url(self, instance):
-        yolo = self.context["request"].build_absolute_uri(static(instance.icon))
-        print(yolo)
-        return yolo
+        return self.context["request"].build_absolute_uri(static(instance.icon))

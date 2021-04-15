@@ -12,6 +12,7 @@ class TestCreateEventAPI:
         pet_url = reverse("pet-detail", kwargs={"pk": pet_db.pk})
         payload = {
             "pet": pet_url,
+            "title": "Some Title",
             "description": "lorem ipsum dolor sit amet",
         }
         rv = api_user_client.post(url, payload)
@@ -22,7 +23,7 @@ class TestCreateEventAPI:
         assert rv.data["url"]
         assert rv.data["pet"]
         assert rv.data["event_type"] is None
-        assert rv.data["title"] == ""
+        assert rv.data["title"] == "Some Title"
         assert rv.data["description"] == "lorem ipsum dolor sit amet"
         assert rv.data["datetime"] is None
         assert rv.data["created_at"]
